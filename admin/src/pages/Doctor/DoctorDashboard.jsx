@@ -4,7 +4,7 @@ import { assets } from "../../assets/assets";
 import { AppContext } from "../../context/AppContext";
 
 const DoctorDashboard = () => {
-  const { dashData, setDashData, getDashData, dToken , completeAppointment, cancelAppointment} = useContext(DoctorContext);
+  const { dashData,  getDashData, dToken , completeAppointment, cancelAppointment} = useContext(DoctorContext);
   const {currency, slotDateFormat} = useContext(AppContext)
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const DoctorDashboard = () => {
      
       <div className="m-5">
         <div className="flex flex-wrap gap-3 ">
-          <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
+          <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100  cursor-pointer  hover:scale-105 transition-all">
             <img className="w-14 " src={assets.earning_icon} alt="" />
             <div>
               <p className="text-xl font-semibold text-gray-600">
