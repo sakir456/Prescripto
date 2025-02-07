@@ -24,7 +24,7 @@ const MyAppointments = () => {
     try {
        const {data} = await axios.get(backendUrl + "/api/user/appointments", {headers:{token}})
        if(data.success){
-        setAppointments(data.appointments.reverse()) // appointments will be recieved in reverse order .reverse is used to reverse appointemnts array
+        setAppointments(data.appointments.reverse()) // appointments will be recieved in reverse order to show latest first
         console.log(data.appointments)
       }
     } catch (error) {
