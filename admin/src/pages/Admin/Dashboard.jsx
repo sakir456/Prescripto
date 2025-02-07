@@ -2,9 +2,10 @@ import { useContext, useEffect } from "react";
 import { AdminContext } from "../../context/AdminContext";
 import { assets } from "../../assets/assets";
 import { AppContext } from "../../context/AppContext";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const Dashboard = () => {
-  const { aToken, getDashData, cancelAppointment, dashData } = useContext(AdminContext);
+  const { aToken, getDashData, cancelAppointment, dashData, loading } = useContext(AdminContext);
 
   const {slotDateFormat } = useContext(AppContext)
 
@@ -15,7 +16,9 @@ const Dashboard = () => {
   }, [aToken]);
 
   return (
-    dashData && (
+    loading ? (
+    <LoadingSpinner/>
+    ) : dashData && (
       <div className="m-5">
         <div className="flex flex-wrap gap-3 ">
           <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">

@@ -1,10 +1,11 @@
 import { useContext, useEffect } from "react"
 import { AdminContext } from "../../context/AdminContext"
+import LoadingSpinner from "../../components/LoadingSpinner"
 
 
 const DoctorsList = () => {
 
-  const {doctors, aToken, getAllDoctors, changeAvailability}  = useContext(AdminContext)
+  const {doctors, aToken, getAllDoctors, changeAvailability, loading}  = useContext(AdminContext)
 
   useEffect(() => {
     if(aToken) {
@@ -12,6 +13,9 @@ const DoctorsList = () => {
     }
   },[aToken])
   return (
+    loading ? (
+      <LoadingSpinner/>
+    ) : (
     <div className="m-5 max-h-[90vh] overflow-y-scroll">
      <h1 className="text-lg font-medium">All Doctors</h1>
      <div className="w-full flex flex-wrap gap-4 pt-5 gap-y-6">
@@ -32,6 +36,7 @@ const DoctorsList = () => {
       }
      </div>
     </div>
+    )
   )
 }
 

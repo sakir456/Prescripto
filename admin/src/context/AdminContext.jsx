@@ -11,12 +11,13 @@ const AdminContextProvider = (props) => {
     const [doctors, setDoctors] = useState([])
     const [appointments, setAppointments] = useState([])
     const [dashData, setDashData] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 
     const getAllDoctors = async ()=> {
-        
+        setLoading(true)
         try {
           
             const {data} = await axios.post(backendUrl + "/api/admin/all-doctors",{},{headers: { aToken }})
@@ -29,10 +30,13 @@ const AdminContextProvider = (props) => {
        } catch (error) {
             toast.error(error.message)
 
+        }finally{
+            setLoading(false)
         }
     }
 
     const changeAvailability = async (docId) => {
+        
         try {
             
             const {data} = await axios.post(backendUrl + "/api/admin/change-availability", {docId}, {headers:{ aToken }})
@@ -49,7 +53,7 @@ const AdminContextProvider = (props) => {
     }
 
     const getAllAppointments = async ()=> {
-
+        setLoading(true)
         try {
             
             const { data }  = await axios.get(backendUrl + "/api/admin/appointments", {headers:{aToken}})
@@ -62,6 +66,8 @@ const AdminContextProvider = (props) => {
 
         } catch (error) {
             toast.error(error.message) 
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -84,6 +90,7 @@ const AdminContextProvider = (props) => {
     }
 
     const getDashData = async()=> {
+        setLoading(true)
         try {
             const {data} = await axios.get(backendUrl + "/api/admin/dashoard", {headers:{aToken}})
 
@@ -95,6 +102,8 @@ const AdminContextProvider = (props) => {
             }
         } catch (error) {
             toast.error(error.message)
+        } finally{
+            setLoading(false)
         }
     }
    
@@ -105,7 +114,8 @@ const AdminContextProvider = (props) => {
            appointments,setAppointments,
            getAllAppointments,
            cancelAppointment,
-           dashData,getDashData
+           dashData,getDashData,
+           loading, setLoading
     }
 
     return (

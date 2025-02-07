@@ -3,16 +3,17 @@ import { DoctorContext } from "../../context/DoctorContext";
 import { AppContext } from "../../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const DoctorProfile = () => {
-  const { dToken, profileData, setProfileData, getProfileData, backendUrl } =
+  const { dToken, profileData, setProfileData, getProfileData, backendUrl, loading, setLoading } =
     useContext(DoctorContext);
   const { currency } = useContext(AppContext);
 
   const [isEdit, setIsEdit] = useState(false);
 
   const updateProfile = async ()=> {
-
+    setLoading(true)
    try {
 
     const updateData  = {
@@ -34,6 +35,8 @@ const DoctorProfile = () => {
    } catch (error) {
     toast.error(error.message)
     console.log(error)
+   }finally{
+    setLoading(false)
    }
 
 
@@ -45,7 +48,9 @@ const DoctorProfile = () => {
     }
   }, [dToken]);
   return (
-    profileData && (
+    loading ? (
+      <LoadingSpinner/>
+    ) : profileData && (
       <div>
         <div className="flex flex-col gap-4 m-5">
           <div>

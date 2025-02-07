@@ -2,9 +2,10 @@ import { useContext, useEffect } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
 import { assets } from "../../assets/assets";
 import { AppContext } from "../../context/AppContext";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const DoctorDashboard = () => {
-  const { dashData,  getDashData, dToken , completeAppointment, cancelAppointment} = useContext(DoctorContext);
+  const { dashData,  getDashData, dToken , completeAppointment, cancelAppointment, loading} = useContext(DoctorContext);
   const {currency, slotDateFormat} = useContext(AppContext)
 
   useEffect(() => {
@@ -12,7 +13,10 @@ const DoctorDashboard = () => {
       getDashData();
     }
   }, [dToken]);
-  return dashData && (
+  return (
+  loading ? (
+    <LoadingSpinner/>
+  ) : dashData && (
      
       <div className="m-5">
         <div className="flex flex-wrap gap-3 ">
@@ -86,6 +90,7 @@ const DoctorDashboard = () => {
           </div>
         </div>
       </div>
+  )
     
   );
 };

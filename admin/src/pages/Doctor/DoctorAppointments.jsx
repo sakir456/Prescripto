@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
 import { AppContext } from "../../context/AppContext";
 import { assets } from "../../assets/assets";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const DoctorAppointments = () => {
   const {
@@ -10,6 +11,7 @@ const DoctorAppointments = () => {
     getAppointments,
     completeAppointment,
     cancelAppointment,
+    loading
   } = useContext(DoctorContext);
 
   const { calculateAge, slotDateFormat, currency } = useContext(AppContext);
@@ -21,6 +23,9 @@ const DoctorAppointments = () => {
   }, [dToken]);
 
   return (
+    loading ? (
+      <LoadingSpinner/>
+    ) : (
     <div className="w-full max-w-6xl m-5">
       <p className="mb-3 text-lg font-medium">All Appointments</p>
       <div className="bg-white border rounded text-sm max-h-[80vh] min-h-[50vh] overflow-y-scroll">
@@ -85,6 +90,7 @@ const DoctorAppointments = () => {
         ))}
       </div>
     </div>
+    )
   );
 };
 

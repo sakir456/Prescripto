@@ -3,6 +3,7 @@ import { assets } from "../../assets/assets";
 import { AdminContext } from "../../context/AdminContext";
 import { toast } from "react-toastify";
 import axios from "axios";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const AddDoctor = () => {
 
@@ -18,12 +19,15 @@ const AddDoctor = () => {
   const [degree, setDegree] = useState("")
   const [address1, setAddress1] = useState("")
   const [address2, setAddress2] = useState("")
+  const [loading, setLoading] = useState(false)
+
 
   const {backendUrl, aToken } = useContext(AdminContext)
 
   const onSubmitHandler = async (event) => {
     event.preventDefault()
-
+     
+    setLoading(true)
     try {
       
       if(!docImg){
@@ -68,7 +72,9 @@ const AddDoctor = () => {
     } catch (error) {
       toast.error(error.message)
       console.log(error)
-    }
+    }finally{
+      setLoading(false)
+  }
 
 
   }
@@ -78,6 +84,9 @@ const AddDoctor = () => {
 
 
   return (
+    loading ? (
+      <LoadingSpinner/>
+    ) : (
     <form onSubmit={onSubmitHandler} className="m-5 w-full">
       <p className="mb-3 text-lg font-medium">Add Doctor</p>
 
@@ -167,6 +176,7 @@ const AddDoctor = () => {
         <button type="submit" className="bg-primary px-10 py-3 mt-4 text-white rounded-full">Add doctor</button>
       </div>
     </form>
+    )
   );
 };
 

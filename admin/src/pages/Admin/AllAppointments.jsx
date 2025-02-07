@@ -2,13 +2,14 @@ import { useContext, useEffect } from "react"
 import { AdminContext } from "../../context/AdminContext"
 import { AppContext } from "../../context/AppContext"
 import { assets } from "../../assets/assets"
+import LoadingSpinner from "../../components/LoadingSpinner"
 
 
 
 const AllAppointments = () => {
 
 
-  const {aToken,appointments,getAllAppointments, cancelAppointment} = useContext(AdminContext)
+  const {aToken,appointments,getAllAppointments, cancelAppointment, loading} = useContext(AdminContext)
   const {calculateAge, slotDateFormat, currency} = useContext(AppContext)
 
   useEffect(()=>{
@@ -20,6 +21,9 @@ const AllAppointments = () => {
 
 
   return (
+    loading ? (
+      <LoadingSpinner/>
+    ) : (
     <div className="w-full max-w-full m-5">
       <p className="mb-3 text-lg font-medium">All Appointments</p>
       <div className="bg-white border rounded text-sm max-h-[80vh] min-h-[60vh] overflow-y-scroll">
@@ -56,6 +60,7 @@ const AllAppointments = () => {
         
       </div>
     </div>
+    )
   )
 }
 
