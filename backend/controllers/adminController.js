@@ -5,6 +5,7 @@ import doctorModel from "../models/doctorModel.js";
 import jwt from "jsonwebtoken"
 import appointmentModel from "../models/appointmentModel.js";
 import userModel from "../models/userModel.js";
+import reportModel from "../models/reportModel.js";
 
 //API for Adding doctor
 
@@ -161,9 +162,20 @@ const appointmentCancel = async (req, res) => {
 
       } catch (error) {
         console.log(error);
-      res.json({ success: false, message: error.message });
+        res.json({ success: false, message: error.message });
       }
   }
 
+  //API to get user report summary for admin panel
+  const reportsAdmin = async(req, res)=> {
+    try {
+       const reports = await reportModel.find({})
+       res.json({success:true, reports})
+     } catch (error) {
+      console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+  }
 
-export {addDoctor, loginAdmin, allDoctors,appointmentsAdmin, appointmentCancel, adminDashboard }
+
+export {addDoctor, loginAdmin, allDoctors,appointmentsAdmin, appointmentCancel, adminDashboard, reportsAdmin }

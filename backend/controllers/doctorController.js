@@ -2,6 +2,7 @@ import doctorModel from "../models/doctorModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import appointmentModel from "../models/appointmentModel.js";
+import reportModel from "../models/reportModel.js";
 
 const changeAvailability = async (req, res) => {
   try {
@@ -173,6 +174,17 @@ const updateDoctorProfile = async (req, res) => {
   }
 };
 
+//API to get user report summary for doctor panel
+const reportsDoctor = async(req, res)=> {
+  try {
+     const reports = await reportModel.find({})
+     res.json({success:true, reports})
+   } catch (error) {
+    console.log(error);
+      res.json({ success: false, message: error.message });
+  }
+} 
+
 export {
   changeAvailability,
   doctorList,
@@ -183,4 +195,5 @@ export {
   doctorDashboard,
   doctorProfile,
   updateDoctorProfile,
+  reportsDoctor
 };

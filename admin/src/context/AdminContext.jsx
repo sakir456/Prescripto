@@ -10,6 +10,7 @@ const AdminContextProvider = (props) => {
     const [aToken, setAToken] = useState(localStorage.getItem("aToken") ? localStorage.getItem("aToken"):"")
     const [doctors, setDoctors] = useState([])
     const [appointments, setAppointments] = useState([])
+    const [reports, setReports] = useState([])
     const [dashData, setDashData] = useState(false)
     const [loading, setLoading] = useState(false)
 
@@ -71,6 +72,7 @@ const AdminContextProvider = (props) => {
         }
     }
 
+
     const cancelAppointment = async(appointmentId)=>{
      
         try {
@@ -106,6 +108,24 @@ const AdminContextProvider = (props) => {
             setLoading(false)
         }
     }
+
+    const getReports = async()=> {
+        
+        setLoading(true)
+     try {
+           const {data} = await axios.get(backendUrl + "/api/admin/reports", {headers:{aToken}})
+           if(data.success){
+           setReports(data.reports)
+           console.log(data.reports)
+           }else {
+            toast.error(data.message)
+        }
+        } catch (error) {
+            toast.error(error.message)
+        }finally{
+            setLoading(false)
+        }
+    }
    
     const value = {
            aToken,setAToken,
@@ -115,6 +135,8 @@ const AdminContextProvider = (props) => {
            getAllAppointments,
            cancelAppointment,
            dashData,getDashData,
+           reports, setReports,
+           getReports,
            loading, setLoading
     }
 

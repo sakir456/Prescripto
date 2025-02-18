@@ -6,6 +6,11 @@ import { v2 as cloudinary } from "cloudinary";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
 import razorpay from "razorpay";
+import OpenAI from "openai";
+import summaryModel from "../models/reportModel.js";
+import reportModel from "../models/reportModel.js";
+
+
 
 // API to register user
 const registerUser = async (req, res) => {
@@ -116,7 +121,6 @@ const updateProfile = async (req, res) => {
 };
 
 //API to book appointment
-
 const bookAppointment = async (req, res) => {
   try {
     const { userId, docId, slotDate, slotTime } = req.body;
@@ -277,4 +281,105 @@ const verifyRazorpay = async (req, res) => {
   }
 }
 
-export {registerUser,loginUser,getProfile,updateProfile,bookAppointment,listAppointment,cancelAppointment,paymentRazorpay, verifyRazorpay};
+//API to generate Summary from user report
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const generateSummary = async(req, res) => {
+  try {
+    const imageFile = req.file;
+
+    if (!imageFile) {
+      return res.json({ success: false, message: "No report Found " });
+    }
+
+    
+
+    // Upload image to Cloudinary
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+      resource_type: "image",
+    });
+    const imageURL = imageUpload.secure_url;
+    
+
+    // Send image to OpenAI API
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: "Read the text from  medical report and Generate   the summary which includes all the important points  that a doctor should see at a glance. " },
+            { type: "image_url", image_url: { url: imageURL } },
+          ],
+        },
+      ],
+    });
+
+  const summary = response.choices[0]?.message?.content || "No text extracted";
+
+    res.json({ success: true, summary, message:"Summary Generated Successfully"  });
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+//API to submit report
+const submitReport = async(req,res)=> {
+  try {
+    const {summary, userId} = req.body
+    const imageFile = req.file;
+
+    if (!imageFile) {
+      return res.json({ success: false, message: "No report image Found " });
+    }
+
+    // Upload image to Cloudinary
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+      resource_type: "image",
+    });
+    const imageURL = imageUpload.secure_url;
+    
+
+      if(!summary || summary.trim() === ""){
+        return res.json({success:false, message: "Please Fill Summary field"})
+      }
+
+      const user = await userModel.findById(userId)
+      if(!user) {
+        return res.json({success:false, message: "not authorized Please login again"})
+      }
+
+      const date = new Date()
+      let day = date.getDate()
+      let month = date.getMonth() + 1 
+
+        let year = date.getFullYear()
+
+        const submitDate = day + "_" + month + "_" + year
+
+      const reportData = {
+        summary,
+        userName: user.name,
+        userEmail: user.email,
+        image:imageURL,
+        date: submitDate,
+
+      }
+
+      const newReport = new reportModel(reportData)
+      await newReport.save()
+      res.json({success:true, message:"Report submitted successfully"})
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+      
+}
+
+ 
+
+export {registerUser,loginUser,getProfile,updateProfile,bookAppointment,listAppointment,cancelAppointment,paymentRazorpay, verifyRazorpay, generateSummary, submitReport};

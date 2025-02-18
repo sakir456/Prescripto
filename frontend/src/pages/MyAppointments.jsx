@@ -5,9 +5,11 @@ import { toast } from "react-toastify"
 import {useNavigate} from "react-router-dom"
 
 
+
 const MyAppointments = () => {
 
   const {backendUrl,  token, getDoctorsData} = useContext(AppContext)
+  
 
   const [appointments, setAppointments] = useState([])
   const months = ["","Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -21,10 +23,11 @@ const MyAppointments = () => {
   }
 
   const getUserAppointments = async ()=> {
+   
     try {
        const {data} = await axios.get(backendUrl + "/api/user/appointments", {headers:{token}})
        if(data.success){
-        setAppointments(data.appointments.reverse()) // appointments will be recieved in reverse order to show latest first
+        setAppointments(data.appointments.reverse()) 
         console.log(data.appointments)
       }
     } catch (error) {
@@ -107,6 +110,7 @@ if(data.success){
   },[token])
 
   return (
+     
     <div>
       <p className="pb-3 mt-12 font-medium text-zinc-700 border-b">My appointments</p>
       <div>
@@ -139,6 +143,7 @@ if(data.success){
           ))}
       </div>
     </div>
+    
   )
 }
 
