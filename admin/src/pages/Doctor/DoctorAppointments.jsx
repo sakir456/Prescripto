@@ -14,7 +14,7 @@ const DoctorAppointments = () => {
     loading
   } = useContext(DoctorContext);
 
-  const { calculateAge, slotDateFormat, currency } = useContext(AppContext);
+  const { calculateAge, DateFormat, currency } = useContext(AppContext);
 
   useEffect(() => {
     if (dToken) {
@@ -60,7 +60,7 @@ const DoctorAppointments = () => {
             </div>
             <p className="max-sm:hidden">{calculateAge(item.userData.dob)}</p>
             <p>
-              {slotDateFormat(item.slotDate)}, {item.slotTime}
+              {DateFormat(item.slotDate)}, {item.slotTime}
             </p>
             <p>
               {currency}

@@ -6,7 +6,7 @@ import { DoctorContext } from "../../context/DoctorContext";
 
 const DoctorReports = () => {
    const {dToken, getReports, reports } = useContext(DoctorContext)
-      const {slotDateFormat} = useContext(AppContext)
+      const {DateFormat} = useContext(AppContext)
       const [selectedReport, setSelectedReport] = useState(null);
   
   
@@ -42,7 +42,7 @@ const DoctorReports = () => {
                  <p className="max-sm:hidden ">{index+1}</p>
                  <p className="max-sm:hidden ">{item.userName}</p>
                  <p>{item.userEmail}</p>
-                 <p>{slotDateFormat(item.date)}</p>
+                 <p>{DateFormat(item.date)}</p>
                 
                  <img className="w-7 cursor-pointer" src={assets.eye} onClick={() => handleReportClick(item)}/>
                  

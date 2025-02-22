@@ -7,7 +7,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 const Dashboard = () => {
   const { aToken, getDashData, cancelAppointment, dashData, loading } = useContext(AdminContext);
 
-  const {slotDateFormat } = useContext(AppContext)
+  const {DateFormat } = useContext(AppContext)
 
   useEffect(() => {
     if (aToken) {
@@ -64,7 +64,7 @@ const Dashboard = () => {
                 <img className="rounded-full w-10" src={item.docData.image} alt="" />
                 <div className="flex-1 text-sm">
                   <p className="text-gray-800 font-medium">{item.docData.name}</p>
-                  <p className="text-gray-600">{slotDateFormat(item.slotDate)}</p>
+                  <p className="text-gray-600">{DateFormat(item.slotDate)}</p>
                 </div>
                 {item.cancelled ? 
             <p className="text-red-400 text-xs font-medium">cancelled</p>

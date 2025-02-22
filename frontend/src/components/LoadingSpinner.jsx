@@ -1,9 +1,9 @@
-const LoadingSpinner = ({text}) => {
+const LoadingSpinner = ({text, textcolour}) => {
     return (
        <button
       disabled
       type="button"
-      className="py-1 px-2 text-sm  text-white inline-flex items-center "
+      className={`py-1 px-2 text-sm  ${textcolour} inline-flex items-center `}
     >
       <svg
         aria-hidden="true"

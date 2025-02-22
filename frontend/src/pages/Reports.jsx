@@ -117,13 +117,13 @@ const Reports = () => {
         <div className="mt-6 w-full">
         {
           isGenerating ? (
-            <button className=" bg-primary text-white  font-light  py-3 px-4 rounded-full"  >  <LoadingSpinner text="Generating..."/> </button>   
+            <button className=" bg-primary text-white  font-light  py-3 px-4 rounded-full"  >  <LoadingSpinner text="Generating..." textcolour="text-white"/> </button>   
           ) :
            isSubmit ? (
             <button className=" bg-primary text-white  font-light  py-3 px-4 rounded-full" onClick={submitReport}>Submit</button>
           ) : 
           isSubmitting ? (
-            <button className=" bg-primary text-white  font-light  py-3 px-4 rounded-full"  >  <LoadingSpinner text="Submitting..."/> </button>
+            <button className=" bg-primary text-white  font-light  py-3 px-4 rounded-full"  >  <LoadingSpinner text="Submitting..." textcolour="text-white"/> </button>
           ) : (
             <button className=" bg-primary text-white  font-light  py-3 px-4 rounded-full" onClick={ generateSummary} > Generate </button>
           )

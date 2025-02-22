@@ -380,6 +380,62 @@ const submitReport = async(req,res)=> {
       
 }
 
+//API to to recommand doctor acccording to symptoms for user panel
+const doctorRecommander = async(req, res)=> {
+  try {
+     
+    const {symptoms} = req.body;
+       const doctors = await doctorModel.find({})   
+
+       if(!doctors){
+        return res.json({success:false, message:"No doctors Found" })
+       }
+
+       const specialities = doctors.map((doc)=>  doc.speciality )
+       const prompt = `
+      You are a medical assistant AI. Based on the given symptoms, recommend the most suitable doctor specialty from the provided list **only** if the symptoms are medically relevant.
+
+      Symptoms: "${symptoms}"
+
+      Choose the most relevant specialty from this list:
+      ${specialities.join(", ")}
+
+      If the symptoms are **random characters, gibberish, or meaningless words**, return:
+      {
+        "speciality": null,
+        "message": "Sorry cant help with that"
+      }
+
+      Otherwise, respond in JSON format as:
+      {
+        "speciality": "Speciality Name"
+         "message": "On the basis of symptoms we Recommand  Speciality Name"
+      }
+    `;
+
+    // OpenAI API Call
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "system", content: prompt }],
+      response_format: { type: "json_object" } 
+    });
+
+    
+    const recommendedSpeciality = JSON.parse(response.choices[0].message.content);
+
+   
+
+    
+    res.json({ success: true, recommendedSpeciality });
+
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+
+
  
 
-export {registerUser,loginUser,getProfile,updateProfile,bookAppointment,listAppointment,cancelAppointment,paymentRazorpay, verifyRazorpay, generateSummary, submitReport};
+export {registerUser,loginUser,getProfile,updateProfile,bookAppointment,listAppointment,cancelAppointment,paymentRazorpay, verifyRazorpay, generateSummary, submitReport, doctorRecommander};

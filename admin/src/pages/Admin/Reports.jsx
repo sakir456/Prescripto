@@ -7,7 +7,7 @@ import { AppContext } from "../../context/AppContext"
 
 const Reports = () => {
     const {aToken, getReports, reports, } = useContext(AdminContext)
-    const {slotDateFormat} = useContext(AppContext)
+    const {DateFormat} = useContext(AppContext)
     const [selectedReport, setSelectedReport] = useState(null);
 
 
@@ -34,7 +34,7 @@ return (
              <p>#</p>
              <p>User Name</p>
              <p>User Email</p>
-             <p>Date & Time</p>
+             <p>Date</p>
             
              <p>Action</p>
            </div>
@@ -43,7 +43,7 @@ return (
                <p className="max-sm:hidden ">{index+1}</p>
                <p className="max-sm:hidden ">{item.userName}</p>
                <p>{item.userEmail}</p>
-               <p>{slotDateFormat(item.date)}</p>
+               <p>{DateFormat(item.date)}</p>
               
                <img className="w-7 cursor-pointer" src={assets.eye} onClick={() => handleReportClick(item)}/>
                
