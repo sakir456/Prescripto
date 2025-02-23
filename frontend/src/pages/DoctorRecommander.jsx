@@ -81,27 +81,24 @@ const DoctorRecommander = () => {
                  response.speciality !== null && (
               filteredDoctors.map((doc,index)=> (
               <div className='flex flex-col justify-center items-center m-4 p-4 border rounded' key={index}>
-              <div className='w-full flex   justify-around max-sm:gap-2 items-center '>
+              <div className='w-full flex   justify-around  items-center '>
                 <img src={doc.image} className='w-12 rounded-full border '/>
                 <div>
-                  <p className='font-medium'>{doc.name}</p>
+                  <p className='font-medium '>{doc.name}</p>
                   <p className='text-sm text-primary'>{doc.speciality}</p>
                   <p className='text-xs text-gray-400'>{doc.experience} Experience</p>
                 </div>
-                <div className="text-green-500 text-xs font-medium">available</div>
+                <div className={`flex items-center gap-2 text-sm text-center ${doc.available ? "text-green-500" : "text-gray-500"}`}>
+            <p className={`w-2 h-2   ${ doc.available ? "bg-green-500" : "bg-gray-500"} rounded-full` }></p><p >{doc.available ? "Available" : "Not Available"}</p>
+            </div>
               </div>
               <button className="w-full  mt-2  py-1.5 rounded-full bg-primary text-white" onClick={()=> navigate(`/appointment/${doc._id}`)} >Book Appointment</button>
                 
               </div>
-              ))
-            ) 
-
-            
-              )
+            ) )
+            ))
             }
-           
-
-            </div>
+           </div>
             <div className=' flex  flex-row gap-2 p-4 max-sm:px-2   border border-x-0'>
              <input value={symptoms} onChange={(e)=> setSymptoms(e.target.value)} type='text' placeholder='Symptoms' className='px-2 py-1 flex flex-1 border outline-gray-300'/>
              <button className='rounded-lg p-2  bg-primary text-white' onClick={handleSend} >

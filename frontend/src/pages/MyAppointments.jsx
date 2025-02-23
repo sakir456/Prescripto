@@ -3,6 +3,9 @@ import { AppContext } from "../context/AppContext"
 import axios from "axios"
 import { toast } from "react-toastify"
 import {useNavigate} from "react-router-dom"
+import LoadingSpinner from "../components/LoadingSpinner"
+
+
 
 
 
@@ -12,6 +15,8 @@ const MyAppointments = () => {
   
 
   const [appointments, setAppointments] = useState([])
+  const [loading, setLoading] = useState(false)
+
   const months = ["","Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   const navigate = useNavigate()
@@ -23,7 +28,8 @@ const MyAppointments = () => {
   }
 
   const getUserAppointments = async ()=> {
-   
+    
+    setLoading(true)
     try {
        const {data} = await axios.get(backendUrl + "/api/user/appointments", {headers:{token}})
        if(data.success){
@@ -33,10 +39,13 @@ const MyAppointments = () => {
     } catch (error) {
        console.log(error);
        toast.error(error.message)
+    } finally{
+      setLoading(false)
     }
   }
 
   const cancelAppointment = async (appointmentId) => {
+    setLoading(true)
        try {
         
        const {data} = await axios.post(backendUrl + "/api/user/cancel-appointment", {appointmentId}, {headers:{token}})
@@ -50,6 +59,8 @@ const MyAppointments = () => {
    } catch (error) {
         console.log(error);
        toast.error(error.message)
+    }finally{
+      setLoading(false)
     }
        }
 
@@ -65,7 +76,8 @@ const MyAppointments = () => {
       receipt: order.receipt,
       handler: async (response)=> {
           console.log(response)
-
+          
+          setLoading(true)
           try {
             
             const {data} = await axios.post(backendUrl + "/api/user/verifyRazorpay", response,{headers:{token}})
@@ -77,6 +89,8 @@ const MyAppointments = () => {
           } catch (error) {
             console.log(error);
             toast.error(error.message)
+          }finally{
+            setLoading(false)
           }
 
       }
@@ -87,7 +101,7 @@ const MyAppointments = () => {
   }
 
   const appointmentRazorpay = async(appointmentId) => {
-      
+    setLoading(true)
     try {
       
 const {data} = await axios.post(backendUrl + "/api/user/payment-razorpay",{appointmentId},{headers:{token}})
@@ -99,6 +113,8 @@ if(data.success){
     } catch (error) {
       console.log(error);
       toast.error(error.message)
+    }finally{
+      setLoading(false)
     }
   } 
   
@@ -110,6 +126,7 @@ if(data.success){
   },[token])
 
   return (
+     
      
     <div>
       <p className="pb-3 mt-12 font-medium text-zinc-700 border-b">My appointments</p>
@@ -131,9 +148,17 @@ if(data.success){
               <div></div>
               <div className="flex flex-col gap-2 justify-end">
               {!item.cancelled && item.payment && !item.isCompleted && <button className="sm:min-w-48 py-2 border rounded text-stone-500 bg-indigo-50">Paid</button>}
-              {!item.cancelled && !item.payment && !item.isCompleted && <button onClick={()=>appointmentRazorpay(item._id)} className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-primary hover:text-white transition-all duration-300 ">Pay Online</button>
+              {
+                loading ? 
+                <button  className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-primary hover:text-white transition-all duration-300 "><LoadingSpinner text="loading" textcolour="text-white"/></button>
+               :
+                !item.cancelled && !item.payment && !item.isCompleted && <button onClick={()=>appointmentRazorpay(item._id)} className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-primary hover:text-white transition-all duration-300 ">Pay Online</button>
               }
-               {!item.cancelled && !item.isCompleted &&  <button onClick={()=>cancelAppointment(item._id)} className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300 ">Cancel Appointment</button>
+               {
+                loading ? 
+                <button  className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300 "><LoadingSpinner text="cancelling" textcolour="text-white"/></button>
+                :
+                !item.cancelled && !item.isCompleted &&  <button onClick={()=>cancelAppointment(item._id)} className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300 ">Cancel Appointment</button>
                }
                {item.cancelled && !item.isCompleted && <button className="sm:min-w-48 py-2 border border-red-500 rounded">Appointment Cancelled</button>
                }

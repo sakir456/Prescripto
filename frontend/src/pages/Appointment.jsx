@@ -5,6 +5,7 @@ import { assets } from "../assets/assets"
 import RelatedDoctors from "../components/RelatedDoctors"
 import { toast } from "react-toastify"
 import axios from "axios"
+import LoadingSpinner from "../components/LoadingSpinner"
 
 
 const Appointment = () => {
@@ -16,6 +17,7 @@ const Appointment = () => {
   const [docSlots, setDocSlots] = useState([])
   const [slotIndex, setSlotIndex] = useState(0)
   const [slotTime, setSlotTime] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -88,6 +90,7 @@ const Appointment = () => {
         return navigate("/login")
       }
 
+      setLoading(true)
       try {
         
         const date = docSlots[slotIndex][1].datetime
@@ -112,6 +115,8 @@ const Appointment = () => {
    } catch (error) {
     console.log(error)
     toast.error(error.message)
+   } finally {
+    setLoading(false)
    }
 
     }
@@ -181,7 +186,13 @@ const Appointment = () => {
             </p>
           ))}
         </div>
-        <button onClick={bookAppointment} className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6">Book an Appointment</button>
+        {
+          loading ? 
+          <button  className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6"> <LoadingSpinner text="loading" textcolour="text-white"/> </button>
+          :
+          <button onClick={bookAppointment} className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6">Book an Appointment</button>
+        }
+        
      </div> 
 
             {/*----Listing Related Doctors  */}
