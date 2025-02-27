@@ -3,10 +3,11 @@ import { AdminContext } from "../../context/AdminContext"
 import { useEffect } from "react"
 import { assets } from "../../assets/assets"
 import { AppContext } from "../../context/AppContext"
+import LoadingSpinner from "../../components/LoadingSpinner"
 
 
 const Reports = () => {
-    const {aToken, getReports, reports, } = useContext(AdminContext)
+    const {aToken, getReports, reports, loading } = useContext(AdminContext)
     const {DateFormat} = useContext(AppContext)
     const [selectedReport, setSelectedReport] = useState(null);
 
@@ -27,6 +28,9 @@ const Reports = () => {
       }
      }, [aToken])
 return (
+  loading ? (
+    <LoadingSpinner/>
+  ) : reports && (
    <div className="w-full max-w-full m-5">
          <p className="mb-3 text-lg font-medium">All Reports</p>
          <div className="bg-white border rounded text-sm max-h-[80vh] min-h-[60vh] overflow-y-scroll">
@@ -62,7 +66,7 @@ return (
                 </div>
             )}
        </div>
-  )
+  ) )
 }
 
 export default Reports

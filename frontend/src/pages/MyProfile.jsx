@@ -4,15 +4,15 @@ import { assets } from "../assets/assets"
 import axios from "axios"
 import { toast } from "react-toastify"
 import LoadingSpinner from "../components/LoadingSpinner"
+import PageLoader from "../components/PageLoader"
 
 
 const MyProfile = () => {
   
-  const {userData, setUserData, token, backendUrl, loadUserProfileData} = useContext(AppContext)
+  const {userData, setUserData, token, backendUrl, loadUserProfileData, loading, setLoading} = useContext(AppContext)
   const [isEdit, setIsEdit] = useState(false)
   const [image, setImage] = useState(false)
-  const [loading, setLoading] = useState(false)
-
+  
   const updateUserProfileData = async()=> {
      
     setLoading(true)
@@ -46,7 +46,10 @@ const MyProfile = () => {
     }
   }
 
-  return userData && (
+  return  (
+    loading ? (
+      <PageLoader/>
+    ) : userData && (
     <div className="max-w-lg flex flex-col gap-2 text-sm">
     {
       isEdit
@@ -126,6 +129,7 @@ const MyProfile = () => {
         }
       </div>
     </div>
+    )
   )
 }
 

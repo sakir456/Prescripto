@@ -39,6 +39,7 @@ const DoctorContextProvider = (props) => {
 
     const completeAppointment = async(appointmentId)=> {
          
+        setLoading(true)
         try {
           
             const {data} = await axios.post(backendUrl + "/api/doctor/complete-appointment", {appointmentId}, {headers:{dToken}})
@@ -54,11 +55,14 @@ const DoctorContextProvider = (props) => {
         } catch (error) {
             console.log(error)
             toast.error(error.message) 
+        }finally{
+            setLoading(false)
         }
     }
 
     const cancelAppointment = async(appointmentId)=> {
          
+        setLoading(true)
         try {
           
             const {data} = await axios.post(backendUrl + "/api/doctor/cancel-appointment", {appointmentId}, {headers:{dToken}})
@@ -74,6 +78,8 @@ const DoctorContextProvider = (props) => {
         } catch (error) {
             console.log(error)
             toast.error(error.message) 
+        }finally{
+            setLoading(false)
         }
     }
 

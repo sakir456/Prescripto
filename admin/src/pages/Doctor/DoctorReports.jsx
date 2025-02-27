@@ -2,10 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { assets } from "../../assets/assets";
 import { DoctorContext } from "../../context/DoctorContext";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 const DoctorReports = () => {
-   const {dToken, getReports, reports } = useContext(DoctorContext)
+   const {dToken, getReports, reports,loading, setLoading } = useContext(DoctorContext)
       const {DateFormat} = useContext(AppContext)
       const [selectedReport, setSelectedReport] = useState(null);
   
@@ -26,6 +27,9 @@ const DoctorReports = () => {
         }
        }, [dToken])
   return (
+    loading ? (
+      <LoadingSpinner/>
+    ) : reports && (
      <div className="w-full max-w-full m-5">
            <p className="mb-3 text-lg font-medium">All Reports</p>
            <div className="bg-white border rounded text-sm max-h-[80vh] min-h-[60vh] overflow-y-scroll">
@@ -61,7 +65,7 @@ const DoctorReports = () => {
                   </div>
               )}
          </div>
-    )
+    ))
 }
 
 export default DoctorReports
